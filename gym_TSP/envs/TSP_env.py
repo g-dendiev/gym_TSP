@@ -4,25 +4,21 @@ from gym import error, spaces
 from gym import utils
 from gym.utils import seeding
 
-try:
-    import hfo_py
-except ImportError as e:
-    raise error.DependencyNotInstalled("{}. (HINT: you can install HFO dependencies with 'pip install gym[soccer].)'".format(e))
 
 import logging
 logger = logging.getLogger(__name__)
 
-class SoccerEnv(gym.Env, utils.EzPickle):
+class TSPEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
         self.viewer = None
         self.server_process = None
         self.server_port = None
-        self.hfo_path = hfo_py.get_hfo_path()
+        #self.hfo_path = hfo_py.get_hfo_path()
         self._configure_environment()
-        self.env = hfo_py.HFOEnvironment()
-        self.env.connectToServer(config_dir=hfo_py.get_config_path())
+        #self.env = hfo_py.HFOEnvironment()
+        #self.env.connectToServer(config_dir=hfo_py.get_config_path())
         self.observation_space = spaces.Box(low=-1, high=1,
                                             shape=(self.env.getStateSize()))
         # Action space omits the Tackle/Catch actions, which are useful on defense
@@ -41,13 +37,13 @@ class SoccerEnv(gym.Env, utils.EzPickle):
         if self.viewer is not None:
             os.kill(self.viewer.pid, signal.SIGKILL)
 
-    def _configure_environment(self):
-        """
-        Provides a chance for subclasses to override this method and supply
-        a different server configuration. By default, we initialize one
-        offense agent against no defenders.
-        """
-        self._start_hfo_server()
+    #def _configure_environment(self):
+    #    """
+    #    Provides a chance for subclasses to override this method and supply
+    #    a different server configuration. By default, we initialize one
+    #    offense agent against no defenders.
+    #    """
+    #    self._start_hfo_server()
 
     def _start_hfo_server(self, frames_per_trial=500,
                           untouched_time=100, offense_agents=1,
@@ -150,10 +146,10 @@ class SoccerEnv(gym.Env, utils.EzPickle):
             if self.viewer is None:
                 self._start_viewer()
 
-ACTION_LOOKUP = {
-    0 : hfo_py.DASH,
-    1 : hfo_py.TURN,
-    2 : hfo_py.KICK,
-    3 : hfo_py.TACKLE, # Used on defense to slide tackle the ball
-    4 : hfo_py.CATCH,  # Used only by goalie to catch the ball
-}
+#ACTION_LOOKUP = {
+#    0 : hfo_py.DASH,
+#    1 : hfo_py.TURN,
+#    2 : hfo_py.KICK,
+#    3 : hfo_py.TACKLE, # Used on defense to slide tackle the ball
+#    4 : hfo_py.CATCH,  # Used only by goalie to catch the ball
+#}
