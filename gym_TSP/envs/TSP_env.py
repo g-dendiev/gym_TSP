@@ -12,15 +12,20 @@ class TSPEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        self.viewer = None
+        self.MAX_CITIES = 500
+        
+        self.final_travel = []
+        self._configure_environment()
+        self.cities = None
+        
         self.server_process = None
         self.server_port = None
-        #self.hfo_path = hfo_py.get_hfo_path()
-        self._configure_environment()
-        #self.env = hfo_py.HFOEnvironment()
-        #self.env.connectToServer(config_dir=hfo_py.get_config_path())
+        
+        # SEE WHAT IS SPACES
+        
         self.observation_space = spaces.Box(low=-1, high=1,
                                             shape=(self.env.getStateSize()))
+        
         # Action space omits the Tackle/Catch actions, which are useful on defense
         self.action_space = spaces.Tuple((spaces.Discrete(3),
                                           spaces.Box(low=0, high=100, shape=1),
